@@ -13,3 +13,35 @@ const apiUrls = [
 ];
 
 // You can write your code here
+async function fetchWithPromiseAll(urls) {
+  const start = performance.now();
+  
+  await Promise.all(urls.map(url => fetch(url)));
+  
+  const end = performance.now();
+  return end - start; // Time taken in milliseconds
+}
+
+// Function to fetch data using Promise.any
+async function fetchWithPromiseAny(urls) {
+  const start = performance.now();
+
+  await Promise.any(urls.map(url => fetch(url)));
+  
+  const end = performance.now();
+  return end - start; // Time taken in milliseconds
+}
+
+// Function to display the results in the table
+async function displayResults() {
+  // Measure time for Promise.all
+  const promiseAllTime = await fetchWithPromiseAll(apiUrls);
+  document.getElementById('output-all').innerText = `${promiseAllTime.toFixed(2)} ms`;
+
+  // Measure time for Promise.any
+  const promiseAnyTime = await fetchWithPromiseAny(apiUrls);
+  document.getElementById('output-any').innerText = `${promiseAnyTime.toFixed(2)} ms`;
+}
+
+// Trigger the display of results when the page loads
+window.onload = displayResults;
