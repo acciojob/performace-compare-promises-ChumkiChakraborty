@@ -13,35 +13,27 @@ const apiUrls = [
 ];
 
 // You can write your code here
-async function fetchWithPromiseAll(urls) {
-  const start = performance.now();
-  
+async function measurePromiseAll(urls) {
+  const start = Date.now(); // Start time
   await Promise.all(urls.map(url => fetch(url)));
-  
-  const end = performance.now();
-  return end - start; // Time taken in milliseconds
+  return Date.now() - start; // End time - Start time = Total time in ms
 }
 
-// Function to fetch data using Promise.any
-async function fetchWithPromiseAny(urls) {
-  const start = performance.now();
-
+// Function to measure the time taken by Promise.any
+async function measurePromiseAny(urls) {
+  const start = Date.now(); // Start time
   await Promise.any(urls.map(url => fetch(url)));
-  
-  const end = performance.now();
-  return end - start; // Time taken in milliseconds
+  return Date.now() - start; // End time - Start time = Total time in ms
 }
 
-// Function to display the results in the table
-async function displayResults() {
-  // Measure time for Promise.all
-  const promiseAllTime = await fetchWithPromiseAll(apiUrls);
-  document.getElementById('output-all').innerText = `${promiseAllTime.toFixed(2)} ms`;
+// Function to update the table with the results
+async function displayTimes() {
+  const timeAll = await measurePromiseAll(apiUrls);
+  document.getElementById('output-all').textContent = `${timeAll} ms`;
 
-  // Measure time for Promise.any
-  const promiseAnyTime = await fetchWithPromiseAny(apiUrls);
-  document.getElementById('output-any').innerText = `${promiseAnyTime.toFixed(2)} ms`;
+  const timeAny = await measurePromiseAny(apiUrls);
+  document.getElementById('output-any').textContent = `${timeAny} ms`;
 }
 
-// Trigger the display of results when the page loads
-window.onload = displayResults;
+// Trigger the measurements and display when the page loads
+window.onload = displayTimes;
